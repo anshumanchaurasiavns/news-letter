@@ -1,7 +1,7 @@
 const express = require( 'express');
 const bodyparser=require("body-parser");
 const request= require('request');
-
+const PORT = process.env.PORT || 3000;
 app=express();
 
 app.use(express.urlencoded({extended:true}));
@@ -51,8 +51,6 @@ app.post("/",function(req,res){
     });
 });
 
-
-
-app.listen(process.env.PORT || 3000,function(){
+app.listen(PORT,function(){
     console.log("Server has started");
 });
