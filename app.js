@@ -56,8 +56,3 @@ app.post("/",function(req,res){
 app.listen(process.env.PORT || 3000,function(){
     console.log("Server has started");
 });
-
-
-// 9189b4b0277c06ffb05a465f72a7967d-us4
-
-//4a34909197
