@@ -1,56 +1,59 @@
-const express = require( 'express');
-const bodyparser=require("body-parser");
-const request= require('request');
+const express = require('express');
+const bodyparser = require("body-parser");
+const request = require('request');
+require('dotenv').config()
+
 const PORT = process.env.PORT || 3000;
-app=express();
+const API_KEY = process.env.API_KEY
 
-app.use(express.urlencoded({extended:true}));
+app = express();
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/",function(req,res){
-    res.sendFile( __dirname+"/index.html");
+app.get("/", function (req, res) {
+    res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/",function(req,res){
-    var email=req.body.email;
-    var fname=req.body.fname;
-    var contact=req.body.contact;
+app.post("/", function (req, res) {
+    let email = req.body.email;
+    let fname = req.body.fname;
+    let contact = req.body.contact;
 
-    console.log(email,fname,contact);
-
-    var data={
-        members:[
+    let data = {
+        members: [
             {
-                email_address:email,
-                status:"subscribed",
-                "merge_fields":{
-                    FNAME:fname,
-                    PHONE:contact
+                email_address: email,
+                status: "subscribed",
+                "merge_fields": {
+                    FNAME: fname,
+                    PHONE: contact
                 }
             }
         ]
     };
 
-    var jasondata=JSON.stringify(data);
+    let jsonData = JSON.stringify(data);
 
-    var option={
-        url:"https://us4.api.mailchimp.com/3.0/lists/4a34909197",
-        method:"POST",
-        headers:{
-            "Authorization":"anshumanchaurasia 9189b4b0277c06ffb05a465f72a7967d-us4"
+    let option = {
+        url: "https://us4.api.mailchimp.com/3.0/lists/4a34909197",
+        method: "POST",
+        headers: {
+            "Authorization": API_KEY
         },
-        body:jasondata
+        body: jsonData
     };
 
-    request(option,function(error,response,body){
-        if(error)
-            console.log("error in req if");
-        else{
-            console.log("success"+response.statusCode);
-            res.send("success");
+    request(option, function (error, response, body) {
+        if (error)
+            console.log("Something went wrong, Please Try again!");
+        else {
+            res.send({
+                "statusCode": response.statusCode,
+                "message": "Sucess!"
+            });
         }
     });
 });
 
-app.listen(PORT,function(){
-    console.log("Server has started");
+app.listen(PORT, function () {
+    console.log("Server has started on : " + PORT);
 });
